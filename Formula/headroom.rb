@@ -29,6 +29,10 @@ class Headroom < Formula
     (var/"log").mkpath
     # Enforce restrictive loopback-only service permissions (0700 for var, 0600 for logs)
     chmod 0700, var/"headroom"
+    touch var/"log/headroom.log"
+    chmod 0600, var/"log/headroom.log"
+    # Re-sign all native shared libraries after Homebrew's relocation pass (fixes macOS AMFI code signing invalid page)
+    system "find", libexec, "-type", "f", "(", "-name", "*.so", "-o", "-name", "*.dylib", ")", "-exec", "codesign", "--force", "--sign", "-", "{}", "+"
   end
 
   service do
@@ -45,6 +49,7 @@ class Headroom < Formula
     log_path var/"log/headroom.log"
     error_log_path var/"log/headroom.log"
     environment_variables PATH: std_service_path_env,
+                          PYTHONUNBUFFERED: "1",
                           HEADROOM_TELEMETRY: "off",
                           OMLX_TARGET_API_URL: "http://127.0.0.1:8888"
   end
