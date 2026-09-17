@@ -12,6 +12,7 @@ class Headroom < Formula
     regex(/v?(\d+(?:\.\d+)+)/i)
   end
 
+  depends_on "rust" => :build
   depends_on "python@3.12"
 
   def install
