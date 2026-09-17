@@ -15,6 +15,8 @@ class Headroom < Formula
   depends_on "rust" => :build
   depends_on "python@3.12"
 
+  skip_clean "libexec"
+
   def install
     system "python3.12", "-m", "venv", libexec
     system libexec/"bin/pip", "install", "--upgrade", "pip", "setuptools", "wheel"
