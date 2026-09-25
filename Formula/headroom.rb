@@ -42,7 +42,8 @@ class Headroom < Formula
       "--port", "8787",
       "--mode", "cache",
       "--backend", "anthropic",
-      "--no-telemetry"
+      "--no-telemetry",
+      "--no-rate-limit"
     ]
     keep_alive true
     working_dir var/"headroom"
@@ -52,6 +53,7 @@ class Headroom < Formula
                           PYTHONUNBUFFERED: "1",
                           HEADROOM_TELEMETRY: "off",
                           HEADROOM_NO_CCR: "1",
+                          HEADROOM_RATE_LIMIT_ENABLED: "0",
                           OMLX_TARGET_API_URL: "http://127.0.0.1:8888"
   end
 
