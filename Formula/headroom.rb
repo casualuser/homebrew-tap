@@ -1,11 +1,11 @@
 class Headroom < Formula
   desc "Context Optimization Layer for LLM Applications (w0m unified multi-upstream)"
   homepage "https://headroom-docs.vercel.app"
-  url "https://github.com/casualuser/headroom.git", branch: "main"
-  version "0.37.0-w0m"
+  url "https://github.com/webomage/headroom.git", branch: "feat/omlx-proxy-routing"
+  version "0.39.0-w0m"
   license "Apache-2.0"
 
-  head "https://github.com/casualuser/headroom.git", branch: "main"
+  head "https://github.com/webomage/headroom.git", branch: "feat/omlx-proxy-routing"
 
   livecheck do
     url "https://api.github.com/repos/headroomlabs-ai/headroom/releases/latest"
@@ -51,6 +51,7 @@ class Headroom < Formula
     environment_variables PATH: std_service_path_env,
                           PYTHONUNBUFFERED: "1",
                           HEADROOM_TELEMETRY: "off",
+                          HEADROOM_NO_CCR: "1",
                           OMLX_TARGET_API_URL: "http://127.0.0.1:8888"
   end
 
