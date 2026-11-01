@@ -14,9 +14,9 @@ class VirtualFido < Formula
 
   def install
     system "bash", "transport/vhid/HIDVirtualDevice/build.sh"
-    (libexec/"lib").install Dir["transport/vhid/output/*.dylib"]
     ENV["CGO_ENABLED"] = "1"
     system "go", "build", "-tags", "hidvirtual", "-o", libexec/"bin/virtual-fido", "./cmd/virtual-fido"
+    (libexec/"lib").install Dir["transport/vhid/output/*.dylib"]
     system "install_name_tool", "-add_rpath", opt_libexec/"lib", libexec/"bin/virtual-fido"
     bin.install_symlink libexec/"bin/virtual-fido"
   end
