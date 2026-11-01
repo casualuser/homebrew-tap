@@ -15,12 +15,8 @@ class LayaMlx < Formula
 
   def install
     system "python3.12", "-m", "venv", libexec
-    ENV.append "LDFLAGS", "-Wl,-headerpad_max_install_names"
-    ENV.append "RUSTFLAGS", "-C link-arg=-Wl,-headerpad_max_install_names"
-    ENV["CARGO_PROFILE_RELEASE_STRIP"] = "false"
-    ENV["MATURIN_STRIP"] = "false"
     system libexec/"bin/pip", "install", "--upgrade", "pip", "setuptools", "wheel", "hatchling"
-    system libexec/"bin/pip", "install", "--no-cache-dir", "--no-binary", "tokenizers,pydantic-core", "#{buildpath}[serve,mcp,structured]"
+    system libexec/"bin/pip", "install", "#{buildpath}[serve,mcp,structured]"
     Dir[libexec/"bin/laya-*"].each do |script|
       bin.install_symlink script
     end

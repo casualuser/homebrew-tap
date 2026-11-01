@@ -15,12 +15,8 @@ class MlxVlm < Formula
 
   def install
     system "python3.12", "-m", "venv", libexec
-    ENV.append "LDFLAGS", "-Wl,-headerpad_max_install_names"
-    ENV.append "RUSTFLAGS", "-C link-arg=-Wl,-headerpad_max_install_names"
-    ENV["CARGO_PROFILE_RELEASE_STRIP"] = "false"
-    ENV["MATURIN_STRIP"] = "false"
     system libexec/"bin/pip", "install", "--upgrade", "pip", "setuptools", "wheel"
-    system libexec/"bin/pip", "install", "--no-cache-dir", "--no-binary", "tokenizers,safetensors", buildpath
+    system libexec/"bin/pip", "install", buildpath
     Dir[libexec/"bin/mlx_vlm*"].each do |script|
       bin.install_symlink script
     end

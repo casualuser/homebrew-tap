@@ -7,14 +7,10 @@ class Omlx < Formula
 
   head "https://github.com/webomage/omlx.git", branch: "beta"
 
-  option "with-custom-kernel",
-         "Build native custom kernels for Bonsai, GLM-5.2, MiniMax M3 and Qwen3.5/3.6/4 acceleration"
-  option "with-grammar", "Install xgrammar for structured output (requires torch, ~2GB)"
-
   depends_on "rust" => :build
   depends_on arch: :arm64
   depends_on macos: :sequoia
-  depends_on "python@3.11"
+  depends_on "python@3.12"
 
   skip_clean "libexec"
 
@@ -35,25 +31,13 @@ class Omlx < Formula
   end
 
   def install
-    system "python3.11", "-m", "venv", libexec
-
-    ENV.append "LDFLAGS", "-Wl,-headerpad_max_install_names"
-    ENV.append "RUSTFLAGS", "-C link-arg=-Wl,-headerpad_max_install_names"
-
-    no_binary = "cohere_melody,pydantic-core,rpds-py,tiktoken,tokenizers"
-    ENV["CARGO_PROFILE_RELEASE_STRIP"] = "false"
-    ENV["MATURIN_STRIP"] = "false"
-    pip_flags = ["--no-cache-dir"]
-
-    pip_install = [libexec/"bin/pip", "install", *pip_flags, "--no-binary", no_binary]
-
-    install_spec = build.with?("grammar") ? "#{buildpath}[audio,grammar]" : "#{buildpath}[audio]"
-    system(*pip_install, install_spec)
+    system "python3.12", "-m", "venv", libexec
+    system libexec/"bin/pip", "install", "--upgrade", "pip", "setuptools", "wheel"
+    system libexec/"bin/pip", "install", "#{buildpath}[audio]"
 
     spacy_model_wheel = buildpath/"en_core_web_sm-3.8.0-py3-none-any.whl"
     cp resource("en-core-web-sm").cached_download, spacy_model_wheel
     system libexec/"bin/pip", "install", "--no-deps", spacy_model_wheel
-    system libexec/"bin/python", "-c", "import spacy; spacy.load('en_core_web_sm')"
 
     bin.install_symlink Dir[libexec/"bin/omlx"]
   end
